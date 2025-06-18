@@ -88,7 +88,6 @@ export const MediaDisplay = ({
                   : `generated-image-${Date.now()}.jpeg`
               }
               className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4 py-2 bg-sky-500 text-white text-sm font-medium rounded-md hover:bg-sky-600"
-              aria-label="Download image"
             >
               Download Image
             </a>
@@ -100,14 +99,12 @@ export const MediaDisplay = ({
           <div
             className="script-display mb-4"
             role="document"
-            aria-label={`${title} content`}
           >
             {videoScript}
           </div>
           <button
             onClick={handleDownloadScript}
             className="px-4 py-2 bg-sky-500 text-white text-sm font-medium rounded-md hover:bg-sky-600 transition-colors"
-            aria-label={`Download ${title}`}
           >
             Download Script
           </button>

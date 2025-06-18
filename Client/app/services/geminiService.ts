@@ -1,52 +1,56 @@
-import type { SuplimaxFormData } from '../types';
-import type { PropertyDetails } from '../types';
+import axios from "axios";
+import type { SuplimaxFormData } from "../types";
+import type { PropertyDetails } from "../types";
 
 export const generateImageFromApi = async (prompt: string): Promise<string> => {
-  const response = await fetch('/api/generate-image', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt }),
-  });
-
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error);
-  return data.image;
+  try {
+    const response = await axios.post("/api/generate-image", { prompt });
+    return response.data.image;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.error ||
+        error.message ||
+        "Failed to generate image via API."
+    );
+  }
 };
 
 export const generateSuplimaxVideoScript = async (
   formData: SuplimaxFormData,
   imageDescription: string
 ): Promise<string> => {
-  const response = await fetch('/api/generate-script', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      type: 'suplimax',
+  try {
+    const response = await axios.post("/api/generate-script", {
+      type: "suplimax",
       data: { ...formData, imageDescription },
-    }),
-  });
-
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error);
-  return data.script;
+    });
+    return response.data.script;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.error ||
+        error.message ||
+        "Failed to generate Suplimax video script."
+    );
+  }
 };
 
 export const generateRealEstateVideoScript = async (
   propertyDetails: PropertyDetails,
   tourStyle: string
 ): Promise<string> => {
-  const response = await fetch('/api/generate-script', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      type: 'realestate',
-      data: { ...propertyDetails, tourStyle }, 
-    }),
-  });
-
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error);
-  return data.script;
+  try {
+    const response = await axios.post("/api/generate-script", {
+      type: "realestate",
+      data: { ...propertyDetails, tourStyle },
+    });
+    return response.data.script;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.error ||
+        error.message ||
+        "Failed to generate real estate video script."
+    );
+  }
 };
 
 export const saveSuplimaxData = async (
@@ -56,36 +60,37 @@ export const saveSuplimaxData = async (
   imageDescription: string,
   videoScript: string
 ): Promise<any> => {
-  const [_, mimeTypePart, dataBase64] = fullImageUrl.match(/^data:(.*?);base64,(.*)$/) || [];
+  const [_, mimeTypePart, dataBase64] =
+    fullImageUrl.match(/^data:(.*?);base64,(.*)$/) || [];
 
   if (!mimeTypePart || !dataBase64) {
     throw new Error("Invalid image URL format for saving.");
   }
 
   const payload = {
-    type: 'suplimax', 
+    type: "suplimax",
     inputs: formData,
-    imagePrompt: imagePrompt, 
+    imagePrompt: imagePrompt,
     image: {
       mimeType: mimeTypePart,
-      dataBase64: dataBase64
+      dataBase64: dataBase64,
     },
-    imageDescription: imageDescription, 
-    videoScript: videoScript, 
-    script: { text: videoScript } 
+    imageDescription: imageDescription,
+    videoScript: videoScript,
+    script: { text: videoScript },
   };
 
-  const response = await fetch('http://localhost:3002/api/suplimax', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
-
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.error || 'Failed to save Suplimax data to backend.');
+  try {
+    const response = await axios.post(
+      "http://localhost:3002/api/suplimax",
+      payload,
+      {}
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to save Suplimax data.");
   }
-  return data;
 };
 
 export const saveRealEstateData = async (
@@ -94,20 +99,20 @@ export const saveRealEstateData = async (
   videoScript: string
 ): Promise<any> => {
   const payload = {
-    type: 'realestate', 
-    inputs: { ...propertyDetails, tourStyle }, 
-    script: { text: videoScript }, 
-      };
+    type: "realestate",
+    inputs: { ...propertyDetails, tourStyle },
+    script: { text: videoScript },
+  };
 
-  const response = await fetch('http://localhost:3002/api/generations', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
-
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.error || 'Failed to save real estate data to backend.');
+  try {
+    const response = await axios.post(
+      "http://localhost:3002/api/generations",
+      payload,
+      {}
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to save Real Estate data.");
   }
-  return data;
 };

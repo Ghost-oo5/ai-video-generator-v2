@@ -1,6 +1,4 @@
 import React from "react";
-import type { SuplimaxFormData } from "./types";
-import { UseCase } from "./components/UseCaseSwitcher";
 
 export interface SuplimaxFormData {
   features: string;
@@ -58,6 +56,8 @@ export interface SuplimaxFormProps {
   onSubmit: () => void;
   isLoading: boolean;
 }
+
+export type UseCase = "suplimax" | "realEstate";
 export interface UseCaseSwitcherProps {
   currentUseCase: UseCase;
   onUseCaseChange: (useCase: UseCase) => void;

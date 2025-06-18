@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import UseCaseSwitcher, {UseCase } from './components/UseCaseSwitcher';
-import { SuplimaxSection } from './components/SuplimaxSection';
-import { RealEstateSection } from './components/RealEstateSection';
-
+import { useState } from "react";
+import UseCaseSwitcher from "./components/UseCaseSwitcher";
+import { UseCase } from "./types";
+import { SuplimaxSection } from "./components/SuplimaxSection";
+import { RealEstateSection } from "./components/RealEstateSection";
 
 const VideoGenerator = () => {
-  const [useCase, setUseCase] = useState<UseCase>('suplimax');
+  const [useCase, setUseCase] = useState<UseCase>("suplimax");
 
   return (
     <div className="bg-slate-900 shadow-2xl rounded-xl p-6 md:p-10 w-full max-w-3xl transform transition-all duration-500 hover:scale-[1.01]">
@@ -21,9 +21,9 @@ const VideoGenerator = () => {
       </header>
 
       <UseCaseSwitcher currentUseCase={useCase} onUseCaseChange={setUseCase} />
-      
+
       <main className="mt-8">
-        {useCase === 'suplimax' ? <SuplimaxSection /> : <RealEstateSection />}
+        {useCase === "suplimax" ? <SuplimaxSection /> : <RealEstateSection />}
       </main>
     </div>
   );
