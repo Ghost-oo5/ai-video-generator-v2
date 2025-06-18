@@ -10,7 +10,7 @@ const VideoGenerator = () => {
   const [useCase, setUseCase] = useState<UseCase>('suplimax');
 
   return (
-    <div className="bg-slate-800 shadow-2xl rounded-xl p-6 md:p-10 w-full max-w-3xl transform transition-all duration-500 hover:scale-[1.01]">
+    <div className="bg-slate-900 shadow-2xl rounded-xl p-6 md:p-10 w-full max-w-3xl transform transition-all duration-500 hover:scale-[1.01]">
       <header className="mb-8 text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-500">
           AI Video Generator
