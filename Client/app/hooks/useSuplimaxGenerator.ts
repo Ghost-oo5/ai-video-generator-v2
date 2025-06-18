@@ -1,7 +1,11 @@
 'use client';
 import { useState, useCallback } from 'react';
 import { SuplimaxFormData } from '@/app/types';
-import { generateImageFromApi, generateSuplimaxVideoScript } from '@/app/services/geminiService';
+import {
+  generateImageFromApi,
+  generateSuplimaxVideoScript,
+  saveSuplimaxData 
+} from '@/app/services/geminiService';
 
 export const useSuplimaxGenerator = () => {
   const [form, setForm] = useState<SuplimaxFormData>({
@@ -22,6 +26,10 @@ export const useSuplimaxGenerator = () => {
       setError('Product features cannot be empty for Suplimax video.');
       return;
     }
+    if (!form.tone.trim() || !form.audience.trim() || !form.videoStyle.trim()) {
+        setError('All select fields must be chosen for Suplimax video.');
+        return;
+    }
 
     setIsLoading(true);
     setError(null);
@@ -31,28 +39,53 @@ export const useSuplimaxGenerator = () => {
     const prompt = `A dynamic studio shot of an energy drink can named "Suplimax"... Style: ${form.videoStyle}, Target: ${form.audience}, Tone: ${form.tone}.`;
     setImagePrompt(prompt);
 
+    let generatedImage = null;
+    let generatedScript = null;
+    let generatedImageDescription = "A visually stunning shot of the 'Suplimax' energy drink.";
+
     try {
       setLoadingMessage('Generating Suplimax drink image...');
-      const image = await generateImageFromApi(prompt);
-      setImageUrl(image);
+      generatedImage = await generateImageFromApi(prompt);
+      setImageUrl(generatedImage);
 
       setLoadingMessage('Generating Suplimax video script...');
-      const description = `The video features a visually stunning shot of the 'Suplimax' energy drink. ...`;
-      const script = await generateSuplimaxVideoScript(form, description);
-      setVideoScript(script);
+      generatedScript = await generateSuplimaxVideoScript(form, generatedImageDescription);
+      setVideoScript(generatedScript);
+
+
+      if (generatedImage && generatedScript) {
+        setLoadingMessage('Saving Suplimax data to database...');
+        const saveResult = await saveSuplimaxData(
+          form,
+          imagePrompt, 
+          generatedImage, 
+          generatedImageDescription, 
+          generatedScript
+        );
+        console.log('Data saved successfully to backend:', saveResult);
+        setLoadingMessage('Content generated and saved successfully!');
+      }
+
     } catch (err: any) {
       console.error(err);
       setError(err.message || 'Failed to generate Suplimax content.');
     } finally {
       setIsLoading(false);
-      setLoadingMessage('');
+
+      setTimeout(() => setLoadingMessage(''), 3000);
     }
-  }, [form]);
+  }, [form, imagePrompt]); 
 
   const reset = () => {
     setImageUrl(null);
     setVideoScript(null);
     setError(null);
+    setForm({ 
+      features: '',
+      tone: '',
+      audience: '',
+      videoStyle: '',
+    });
   };
 
   return {

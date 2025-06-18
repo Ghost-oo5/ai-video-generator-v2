@@ -7,7 +7,6 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   const result = await Suplimax.find();
   res.send(result);
-  res.send('suplimax');
 });
 
 router.post('/', async (req, res) => {
@@ -23,7 +22,7 @@ router.post('/', async (req, res) => {
     const record = await Suplimax.create({
       inputs,
       imagePrompt,
-      imageBase64: image,
+      imageBase64: image, 
       imageDescription,
       videoScript
     });
@@ -31,7 +30,7 @@ router.post('/', async (req, res) => {
     res.status(201).json({ success: true, id: record._id });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Failed to save Suplimax generation' });
+    res.status(500).json({ error: `Failed to save Suplimax generation ${err}` });
   }
 });
 

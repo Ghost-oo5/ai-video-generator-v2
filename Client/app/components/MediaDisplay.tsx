@@ -25,7 +25,7 @@ export const MediaDisplay = ({
 
   useEffect(() => {
     if (imageUrl) {
-      console.log("Image URL:", imageUrl);
+      console.log("Image URL: found");
     }
   }, [imageUrl]);
 
@@ -48,7 +48,7 @@ export const MediaDisplay = ({
   }
 
   if (!imageUrl && !videoScript) {
-    return null; // Don't render anything if no content and placeholder is off
+    return null; 
   }
 
   return (
