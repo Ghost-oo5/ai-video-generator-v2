@@ -1,4 +1,3 @@
-// app/api/video/route.ts
 import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
 

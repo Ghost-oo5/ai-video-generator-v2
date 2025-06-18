@@ -1,31 +1,30 @@
-// Server/Model/Generations.js
 const mongoose = require("mongoose");
 
 const generationScheme = new mongoose.Schema({
   type: {
     type: String,
     enum: ["suplimax", "realestate"],
-    required: true // Mark type as required
+    required: true 
   },
-  inputs: { // Changed to Object to store dynamic input data (propertyDetails, SuplimaxFormData)
+  inputs: { 
     type: Object,
-    required: true // Mark inputs as required
+    required: true 
   },
-  image: { // Optional: for cases where an image is generated (e.g., Suplimax)
+  image: { 
     mimeType: String,
     dataBase64: String,
   },
   script: {
-    text: { type: String, required: true }, // Mark script text as required
-    scenesJSON: Object, // Optional: for structured script data
+    text: { type: String, required: true }, 
+    scenesJSON: Object, 
   },
-  video: { // Optional: for generated video URLs
+  video: { 
     videoUrl: String,
     operationId: String,
   },
   createdAt: {
     type: Date,
-    default: Date.now, // Use Date.now for default timestamp
+    default: Date.now, 
   }
 });
 

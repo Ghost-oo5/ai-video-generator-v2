@@ -1,6 +1,6 @@
 # 📦 Client - AI Video Generator Frontend
 
-This is the **frontend** of the `ghost-oo5-ai-video-generator` project. It's a Next.js 15 application using modern tools like Tailwind CSS, TypeScript, Zustand, and Google GenAI.
+This is the **frontend** of the `ghost-oo5-ai-video-generator` project. It's a Next.js 15 application using modern tools like Tailwind CSS, TypeScript, and Google GenAI.
 
 ---
 
@@ -10,7 +10,6 @@ This is the **frontend** of the `ghost-oo5-ai-video-generator` project. It's a N
 - **React 19**
 - **Tailwind CSS**
 - **TypeScript**
-- **Zustand (State Management)**
 - **shadcn/ui & lucide-react (UI Libraries)**
 - **Google Generative AI APIs**
 

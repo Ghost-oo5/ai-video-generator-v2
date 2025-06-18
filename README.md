@@ -73,7 +73,6 @@ Then open: [http://localhost:3000](http://localhost:3000)
 ### ✅ API and State Handling
 - Next.js API routes in `Client/app/api/`
 - Backend Express routes in `Server/routes/`
-- Zustand state management in frontend
 - RESTful structure for scalability
 
 ---

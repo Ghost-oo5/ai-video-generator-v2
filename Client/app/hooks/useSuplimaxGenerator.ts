@@ -57,7 +57,7 @@ export const useSuplimaxGenerator = () => {
         setLoadingMessage('Saving Suplimax data to database...');
         const saveResult = await saveSuplimaxData(
           form,
-          imagePrompt, 
+          prompt, 
           generatedImage, 
           generatedImageDescription, 
           generatedScript

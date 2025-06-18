@@ -22,17 +22,15 @@ export const useRealEstateGenerator = () => {
     setVideoScript(null);
     setLoadingMessage("Generating real estate video tour script...");
 
-    let generatedScript = null; // Variable to hold the script for saving
+    let generatedScript = null; 
 
     try {
-      // 1. Generate the video script
       generatedScript = await generateRealEstateVideoScript(
         REAL_ESTATE_PROPERTY_DETAILS,
         form.tourStyle
       );
-      setVideoScript(generatedScript); // Update UI state with the generated script
+      setVideoScript(generatedScript); 
 
-      // 2. Save the generated data to the backend (NEW STEP)
       if (generatedScript) {
         setLoadingMessage("Saving real estate data to database...");
         const saveResult = await saveRealEstateData(
@@ -51,15 +49,13 @@ export const useRealEstateGenerator = () => {
       setError(err.message || "Failed to generate real estate script.");
     } finally {
       setIsLoading(false);
-      // Briefly show the success message before clearing
       setTimeout(() => setLoadingMessage(""), 3000);
     }
-  }, [form]); // Dependency array: re-run submit if form changes
+  }, [form]); 
 
   const reset = () => {
     setVideoScript(null);
     setError(null);
-    // Reset form to its initial default state
     setForm({
       tourStyle: "Luxury Showcase",
     });

@@ -1,4 +1,3 @@
-// Client/app/services/geminiService.ts
 import type { SuplimaxFormData } from '../types';
 import type { PropertyDetails } from '../types';
 
@@ -41,7 +40,7 @@ export const generateRealEstateVideoScript = async (
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       type: 'realestate',
-      data: { ...propertyDetails, tourStyle }, // Ensure all details are passed here
+      data: { ...propertyDetails, tourStyle }, 
     }),
   });
 
@@ -64,19 +63,19 @@ export const saveSuplimaxData = async (
   }
 
   const payload = {
-    type: 'suplimax', // Specify type for Generations model
+    type: 'suplimax', 
     inputs: formData,
-    imagePrompt: imagePrompt, // This field is on SuplimaxGeneration, but not Generations schema directly
+    imagePrompt: imagePrompt, 
     image: {
       mimeType: mimeTypePart,
       dataBase64: dataBase64
     },
-    imageDescription: imageDescription, // This field is on SuplimaxGeneration, but not Generations schema directly
-    videoScript: videoScript, // This field is on SuplimaxGeneration, but not Generations schema directly
-    script: { text: videoScript } // For the generic Generations schema
+    imageDescription: imageDescription, 
+    videoScript: videoScript, 
+    script: { text: videoScript } 
   };
 
-  const response = await fetch('http://localhost:3002/api/suplimax', { // Still sending to suplimax route
+  const response = await fetch('http://localhost:3002/api/suplimax', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -89,21 +88,17 @@ export const saveSuplimaxData = async (
   return data;
 };
 
-// NEW FUNCTION: To save the generated Real Estate data to the Generations collection
 export const saveRealEstateData = async (
   propertyDetails: PropertyDetails,
   tourStyle: string,
   videoScript: string
 ): Promise<any> => {
   const payload = {
-    type: 'realestate', // Required by the Generations schema
-    inputs: { ...propertyDetails, tourStyle }, // Combine propertyDetails and tourStyle into one object for 'inputs'
-    script: { text: videoScript }, // Place the script text in the 'script.text' field
-    // No 'image' or 'video' fields are typically generated for Real Estate scripts
-    // so they can be omitted or sent as null/empty if the schema allows (which it does)
-  };
+    type: 'realestate', 
+    inputs: { ...propertyDetails, tourStyle }, 
+    script: { text: videoScript }, 
+      };
 
-  // Send to the /api/generations endpoint
   const response = await fetch('http://localhost:3002/api/generations', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
