@@ -1,36 +1,40 @@
-'use client';
-import { useState, useCallback } from 'react';
-import { SuplimaxFormData } from '@/app/types';
+"use client";
+import { useState, useCallback } from "react";
+import { SuplimaxFormData } from "@/app/types";
 import {
   generateImageFromApi,
   generateSuplimaxVideoScript,
-  saveSuplimaxData 
-} from '@/app/services/geminiService';
+  saveSuplimaxData,
+} from "@/app/services/geminiService";
 
 export const useSuplimaxGenerator = () => {
   const [form, setForm] = useState<SuplimaxFormData>({
-    features: '',
-    tone: '',
-    audience: '',
-    videoStyle: '',
+    features: "",
+    tone: "",
+    audience: "",
+    videoStyle: "",
   });
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [videoScript, setVideoScript] = useState<string | null>(null);
-  const [imagePrompt, setImagePrompt] = useState<string>('');
+  const [imagePrompt, setImagePrompt] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState('');
+  const [loadingMessage, setLoadingMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const submit = useCallback(async () => {
-    if (!form.features.trim()) {
-      setError('Product features cannot be empty for Suplimax video.');
+  const validateForm = () => {
+    if (!form.features.trim()) return "Product features are required.";
+    if (!form.tone.trim() || !form.audience.trim() || !form.videoStyle.trim()) {
+      return "Please select tone, audience, and video style.";
+    }
+    return null;
+  };
+
+  const submit = async () => {
+    const errorMsg = validateForm();
+    if (errorMsg) {
+      setError(errorMsg);
       return;
     }
-    if (!form.tone.trim() || !form.audience.trim() || !form.videoStyle.trim()) {
-        setError('All select fields must be chosen for Suplimax video.');
-        return;
-    }
-
     setIsLoading(true);
     setError(null);
     setImageUrl(null);
@@ -41,56 +45,65 @@ export const useSuplimaxGenerator = () => {
 
     let generatedImage = null;
     let generatedScript = null;
-    let generatedImageDescription = "A visually stunning shot of the 'Suplimax' energy drink.";
+    let generatedImageDescription =
+      "A visually stunning shot of the 'Suplimax' energy drink.";
 
     try {
-      setLoadingMessage('Generating Suplimax drink image...');
+      setLoadingMessage("Generating Suplimax drink image...");
       generatedImage = await generateImageFromApi(prompt);
       setImageUrl(generatedImage);
 
-      setLoadingMessage('Generating Suplimax video script...');
-      generatedScript = await generateSuplimaxVideoScript(form, generatedImageDescription);
+      setLoadingMessage("Generating Suplimax video script...");
+      generatedScript = await generateSuplimaxVideoScript(
+        form,
+        generatedImageDescription
+      );
       setVideoScript(generatedScript);
 
-
       if (generatedImage && generatedScript) {
-        setLoadingMessage('Saving Suplimax data to database...');
+        setLoadingMessage("Saving Suplimax data to database...");
         const saveResult = await saveSuplimaxData(
           form,
-          prompt, 
-          generatedImage, 
-          generatedImageDescription, 
+          prompt,
+          generatedImage,
+          generatedImageDescription,
           generatedScript
         );
-        console.log('Data saved successfully to backend:', saveResult);
-        setLoadingMessage('Content generated and saved successfully!');
+        console.log("Data saved successfully to backend:", saveResult);
+        setLoadingMessage("Content generated and saved successfully!");
       }
-
     } catch (err: any) {
       console.error(err);
-      setError(err.message || 'Failed to generate Suplimax content.');
+      setError(err.message || "Failed to generate Suplimax content.");
     } finally {
       setIsLoading(false);
 
-      setTimeout(() => setLoadingMessage(''), 3000);
+      setTimeout(() => setLoadingMessage(""), 3000);
     }
-  }, [form, imagePrompt]); 
+  };
 
   const reset = () => {
     setImageUrl(null);
     setVideoScript(null);
     setError(null);
-    setForm({ 
-      features: '',
-      tone: '',
-      audience: '',
-      videoStyle: '',
+    setForm({
+      features: "",
+      tone: "",
+      audience: "",
+      videoStyle: "",
     });
   };
 
   return {
-    form, setForm, imageUrl, videoScript, imagePrompt,
-    isLoading, loadingMessage, error,
-    submit, reset,
+    form,
+    setForm,
+    imageUrl,
+    videoScript,
+    imagePrompt,
+    isLoading,
+    loadingMessage,
+    error,
+    submit,
+    reset,
   };
 };

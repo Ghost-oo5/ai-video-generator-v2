@@ -83,8 +83,7 @@ export const saveSuplimaxData = async (
   try {
     const response = await axios.post(
       "http://localhost:3002/api/suplimax",
-      payload,
-      {}
+      payload
     );
     return response.data;
   } catch (err) {
@@ -107,8 +106,7 @@ export const saveRealEstateData = async (
   try {
     const response = await axios.post(
       "http://localhost:3002/api/generations",
-      payload,
-      {}
+      payload
     );
     return response.data;
   } catch (err) {

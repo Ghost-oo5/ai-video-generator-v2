@@ -1,19 +1,18 @@
 'use client';
 
-import React from 'react';
 import type { SuplimaxFormData, SuplimaxFormProps } from '@/app/types';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
+  SelectGroup,
   SelectItem,
-  SelectLabel,
-  SelectGroup
+  SelectTrigger,
+  SelectValue
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import React from 'react';
 
 const OPTIONS = {
   tone: ['Energetic', 'Sophisticated', 'Humorous', 'Mysterious', 'Bold', 'Refreshing'],
@@ -45,7 +44,6 @@ export const SuplimaxForm = ({ formData, onFormChange, onSubmit, isLoading }: Su
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Features */}
       <div className="space-y-2">
         <Label htmlFor="features">Key Product Features</Label>
         <Textarea
@@ -58,9 +56,7 @@ export const SuplimaxForm = ({ formData, onFormChange, onSubmit, isLoading }: Su
         />
       </div>
 
-      {/* Selects */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Tone */}
         <div className="space-y-2">
           <label>Tone</label>
           <Select
